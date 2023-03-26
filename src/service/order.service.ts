@@ -4,6 +4,7 @@ import {
   OrderCreateCommandResponse,
   OrderFindQueryRequest,
   OrderFindQueryResponse,
+  OrderUpdateCommandRequest,
 } from "./order.interface";
 
 export default class OrderService {
@@ -25,6 +26,15 @@ export default class OrderService {
       .catch((e) => {
         console.error(e);
         return e;
+      });
+  }
+
+  public static async updateOrder(data: OrderUpdateCommandRequest) {
+    return axios
+      .put(`http://localhost:3334/api/order/${data.id}`, data)
+      .catch((e) => {
+        console.error(e);
+        return null;
       });
   }
 }

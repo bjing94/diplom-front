@@ -51,3 +51,15 @@ export interface OrderCreateCommandRequest {
 export interface OrderCreateCommandResponse {
   readonly orderId: string;
 }
+
+export interface OrderUpdateCommandRequest {
+  readonly id: string;
+
+  readonly status: OrderStatus;
+}
+
+export interface OrderUpdateCommandResponse {
+  readonly id: string;
+
+  readonly status: OrderStatus;
+}

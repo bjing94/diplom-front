@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Divider,
   Grid,
   Typography,
 } from "@mui/material";
@@ -17,38 +18,39 @@ import KitchenService from "../service/kitchen/kitchen.service";
 
 const CookingRequestItem = (props: {
   request: CookingRequestGetQueryResponse;
+  updateRequests: () => void;
 }) => {
-  const { request } = props;
+  const { request, updateRequests } = props;
 
   return (
     <Grid item xs={12} key={request.id}>
-      <Container maxWidth="xs">
-        <Card>
-          <CardContent>
-            <Box height={"40px"}>
-              <Typography variant="h5">{request.product?.name}</Typography>
-            </Box>
-          </CardContent>
-
-          <CardActions>
-            <Box height={"40px"}>
-              {request.status === CookingRequestStatus.PENDING && (
-                <Button
-                  onClick={() => {
-                    KitchenService.updateRequest({
-                      id: request.id,
-                      status: CookingRequestStatus.READY,
-                    });
-                  }}
-                  variant="contained"
-                >
-                  Выполнить
-                </Button>
-              )}
-            </Box>
-          </CardActions>
-        </Card>
-      </Container>
+      <Card>
+        <CardContent>
+          <Box
+            marginTop="5px"
+            marginBottom="5px"
+            display="flex"
+            justifyContent={"space-between"}
+          >
+            <Typography variant="h6" textAlign={"start"}>
+              {request.product.name}
+            </Typography>
+            {request.status === CookingRequestStatus.PENDING && (
+              <Button
+                onClick={() => {
+                  KitchenService.updateRequest({
+                    id: request.id,
+                    status: CookingRequestStatus.PENDING,
+                  }).then(updateRequests);
+                }}
+                variant="contained"
+              >
+                Готово
+              </Button>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
     </Grid>
   );
 };
@@ -77,42 +79,41 @@ export default function KitchenPage() {
   };
 
   useEffect(() => {
-    getReadyRequests();
-    getPendingRequests();
+    updateRequests();
   }, []);
 
+  const updateRequests = () => {
+    getReadyRequests();
+    getPendingRequests();
+  };
+
   const readyRequestItems = readyRequests.map((item) => {
-    return <CookingRequestItem request={item} />;
+    return (
+      <CookingRequestItem updateRequests={updateRequests} request={item} />
+    );
   });
 
   const pendingRequestItems = pendingRequests.map((item) => {
-    return <CookingRequestItem request={item} />;
+    return (
+      <CookingRequestItem updateRequests={updateRequests} request={item} />
+    );
   });
 
   return (
-    <Container maxWidth="md">
-      <Grid container columnSpacing={2}>
-        <Grid container item xs={6} rowSpacing={2} height="fit-content">
+    <Container maxWidth="lg">
+      <Box marginTop={"10px"}>
+        <Grid container columnSpacing={2} rowSpacing={2}>
           <Grid item xs={12}>
-            <Box bgcolor={"green"}>
-              <Typography variant="h5" textAlign={"center"} color="white">
-                Запрос
+            <Box display={"flex"}>
+              <Typography fontWeight={"bold"} variant="h5">
+                Требуется приготовить
               </Typography>
             </Box>
           </Grid>
+          <Divider variant="fullWidth" />
           {pendingRequestItems}
         </Grid>
-        <Grid container item xs={6} rowSpacing={2} height="fit-content">
-          <Grid item xs={12}>
-            <Box bgcolor={"gray"}>
-              <Typography variant="h5" textAlign={"center"} color="white">
-                Выполнено
-              </Typography>
-            </Box>
-          </Grid>
-          {readyRequestItems}
-        </Grid>
-      </Grid>
+      </Box>
     </Container>
   );
 }

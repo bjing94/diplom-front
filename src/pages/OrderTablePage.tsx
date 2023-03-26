@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { OrderFindSingle, OrderStatus } from "../service/order.interface";
 import OrderService from "../service/order.service";
 
-export default function OrderTablePage() {
+export default function OrderMonitorPage() {
   const [ordersPreparing, setOrdersPreparing] = useState<OrderFindSingle[]>([]);
   const [ordersReady, setOrdersReady] = useState<OrderFindSingle[]>([]);
 
@@ -20,25 +20,22 @@ export default function OrderTablePage() {
 
   const orderPreparingElements = ordersPreparing.map((order) => {
     return (
-      <div>
-        <p>{order.id}</p>
-      </div>
+      <Typography fontWeight={"bold"} marginBottom={"5px"}>
+        {order.id}
+      </Typography>
     );
   });
 
   const orderReadyElements = ordersReady.map((order) => {
-    return (
-      <div>
-        <p>{order.id}</p>
-      </div>
-    );
+    return <Typography>{order.id}</Typography>;
   });
+
   return (
     <Container maxWidth="lg">
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Box bgcolor={"gray"} height="50px">
-            <Typography color={"white"} lineHeight="50px">
+            <Typography color={"white"} lineHeight="50px" fontWeight={"bold"}>
               Готовятся
             </Typography>
           </Box>
@@ -46,7 +43,7 @@ export default function OrderTablePage() {
         </Grid>
         <Grid item xs={6}>
           <Box bgcolor={"green"}>
-            <Typography color={"white"} lineHeight="50px">
+            <Typography color={"white"} lineHeight="50px" fontWeight={"bold"}>
               Готовы к выдаче
             </Typography>
           </Box>
