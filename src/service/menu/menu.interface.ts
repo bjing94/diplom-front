@@ -1,5 +1,5 @@
 export interface ProductResponseDto {
-  readonly id?: string;
+  readonly id: string;
 
   readonly name: string;
 
@@ -30,4 +30,28 @@ export interface MenuGetQueryRequest {
 
 export interface MenuGetQueryResponse {
   readonly menu: MenuResponseDto;
+}
+
+export interface MenuItemUpdateRequestDto {
+  readonly productId: string;
+
+  readonly available: boolean;
+
+  readonly price: number;
+}
+
+export interface MenuUpdateRequestDto {
+  readonly items: MenuItemUpdateRequestDto[];
+
+  readonly active: boolean;
+}
+
+export interface MenuUpdateCommandRequest {
+  readonly id: string;
+
+  readonly data: MenuUpdateRequestDto;
+}
+
+export interface MenuUpdateCommandResponse {
+  readonly success: boolean;
 }

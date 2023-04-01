@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import MenuEditPage from "./pages/MenuEditPage";
 
 const drawerWidth = 240;
 function PermanentDrawerLeft() {
@@ -78,6 +79,16 @@ function PermanentDrawerLeft() {
             </ListItemButton>
           </Link>
         </ListItem>
+        <ListItem key={"menu-edit"} disablePadding>
+          <Link to="/menu-edit">
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Редактировать меню"} />
+            </ListItemButton>
+          </Link>
+        </ListItem>
       </List>
     </Drawer>
   );
@@ -93,6 +104,7 @@ function App() {
           <Route path="orders/monitor" element={<OrderMonitorPage />} />
           <Route path="kitchen" element={<KitchenPage />} />
           <Route path="pay/:id" element={<PayPage />} />
+          <Route path="menu-edit" element={<MenuEditPage />} />
         </Routes>
         <PermanentDrawerLeft />
       </BrowserRouter>
