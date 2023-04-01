@@ -1,7 +1,6 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -13,11 +12,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import {
-  MenuItemResponseDto,
   MenuItemUpdateRequestDto,
+  ProductResponseDto,
 } from "../service/menu/menu.interface";
-import { FormControlLabel, Input, Switch, TextField } from "@mui/material";
+import {
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
+import ProductService from "../service/product/product.service";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -36,8 +44,21 @@ export default function MenuAddDialog(props: {
   const { isOpen, onClose, onMenuItemAdd: onMenuItemUpdate } = props;
   const [price, setPrice] = useState(100);
   const [active, setActive] = useState(true);
-  const [productId, setProductId] = useState(null);
+  const [productId, setProductId] = useState<string | null>(null);
+  const [products, setProducts] = useState<ProductResponseDto[]>([]);
 
+  useEffect(() => {
+    ProductService.getAllProducts({
+      take: 5,
+      skip: 0,
+    }).then((data) => {
+      setProducts(data.data.products);
+    });
+  }, []);
+
+  const menuItems = products.map((product) => {
+    return <MenuItem value={product.id}>{product.name}</MenuItem>;
+  });
   return (
     <div>
       <Dialog
@@ -76,12 +97,17 @@ export default function MenuAddDialog(props: {
           </Toolbar>
         </AppBar>
         <List>
-          <Divider />
-          <ListItem button>
-            <TextField label="Цена" value={price} />
+          <ListItem>
+            <TextField
+              label="Цена"
+              value={price}
+              onChange={(event) => {
+                setPrice(+event.target.value);
+              }}
+            />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem>
             <FormControlLabel
               control={<Switch checked={active} />}
               onClick={() => {
@@ -90,6 +116,23 @@ export default function MenuAddDialog(props: {
               label="Активность"
               labelPlacement="top"
             />
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Продукт</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={productId}
+                label="Продукт"
+                onChange={(event) => {
+                  setProductId(event.target.value);
+                }}
+              >
+                {menuItems}
+              </Select>
+            </FormControl>
           </ListItem>
         </List>
       </Dialog>

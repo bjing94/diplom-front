@@ -126,6 +126,27 @@ export default function MenuEditPage() {
       console.log(data);
     });
   };
+
+  const handleAddItem = (data: MenuItemUpdateRequestDto) => {
+    if (!menu) return;
+
+    const itemsUpdate = menu.items.map((item) => {
+      return {
+        productId: item.product.id,
+        price: item.price,
+        available: item.available,
+      };
+    });
+    itemsUpdate.push(data);
+
+    MenuService.updateMenu({
+      id: menu.id,
+      data: {
+        active: menu?.active,
+        items: itemsUpdate,
+      },
+    });
+  };
   return (
     <Container maxWidth={"sm"}>
       <MenuEditDialog
@@ -142,7 +163,7 @@ export default function MenuEditPage() {
         onClose={() => {
           setIsAddOpen(false);
         }}
-        onMenuItemAdd={handleMenuUpdate}
+        onMenuItemAdd={handleAddItem}
       />
       <Box height={"100vh"} display="flex" flexDirection={"column"}>
         <Grid container spacing={2} paddingTop={2}>
