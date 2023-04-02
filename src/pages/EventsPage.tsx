@@ -5,7 +5,9 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  FormControlLabel,
   Grid,
+  TextField,
   Typography,
 } from "@mui/material";
 import { Box, Container } from "@mui/system";
@@ -15,9 +17,13 @@ import {
   CookingRequestStatus,
 } from "../service/kitchen/kitchen.interface";
 import KitchenService from "../service/kitchen/kitchen.service";
-import { EventResponse } from "../service/event/event.interface";
+import {
+  EventResponse,
+  FindEventsFilterDto,
+} from "../service/event/event.interface";
 import EventService from "../service/event/event.service";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { DatePicker } from "@mui/x-date-pickers";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -60,58 +66,53 @@ enum CategoryType {
 export default function EventsPage() {
   const [orderEvents, setOrderEvents] = useState<EventResponse[]>([]);
   const [category, setCategory] = useState<CategoryType>(CategoryType.order);
+  const [startDate, setStartDate] = useState<Date>(new Date("2023-03-02"));
+  const [endDate, setEndDate] = useState<Date>(new Date("2023-04-02"));
+  const [objectId, setObjectId] = useState<string | null>(null);
 
-  useEffect(() => {
+  const handleGetEvents = () => {
+    const query: FindEventsFilterDto = {
+      from: startDate,
+      to: endDate,
+      id: objectId ?? undefined,
+    };
+
     if (category === CategoryType.order) {
-      EventService.getOrderEvents({
-        from: new Date("2023-03-02"),
-        to: new Date("2023-04-02"),
-      }).then((response) => {
+      EventService.getOrderEvents(query).then((response) => {
         setOrderEvents(response.data);
       });
     }
     if (category === CategoryType.product) {
-      EventService.getProductEvents({
-        from: new Date("2023-03-02"),
-        to: new Date("2023-04-02"),
-      }).then((response) => {
+      EventService.getProductEvents(query).then((response) => {
         setOrderEvents(response.data);
       });
     }
     if (category === CategoryType.cookingRequest) {
-      EventService.getCookingRequest({
-        from: new Date("2023-03-02"),
-        to: new Date("2023-04-02"),
-      }).then((response) => {
+      EventService.getCookingRequest(query).then((response) => {
         setOrderEvents(response.data);
       });
     }
     if (category === CategoryType.cookingStock) {
-      EventService.getCookingStockEvents({
-        from: new Date("2023-03-02"),
-        to: new Date("2023-04-02"),
-      }).then((response) => {
+      EventService.getCookingStockEvents(query).then((response) => {
         setOrderEvents(response.data);
       });
     }
 
     if (category === CategoryType.payment) {
-      EventService.getPaymentEvents({
-        from: new Date("2023-03-02"),
-        to: new Date("2023-04-02"),
-      }).then((response) => {
+      EventService.getPaymentEvents(query).then((response) => {
         setOrderEvents(response.data);
       });
     }
 
     if (category === CategoryType.menu) {
-      EventService.getMenuEvents({
-        from: new Date("2023-03-02"),
-        to: new Date("2023-04-02"),
-      }).then((response) => {
+      EventService.getMenuEvents(query).then((response) => {
         setOrderEvents(response.data);
       });
     }
+  };
+
+  useEffect(() => {
+    handleGetEvents();
   }, [category]);
 
   return (
@@ -190,6 +191,51 @@ export default function EventsPage() {
                 variant="contained"
               >
                 Готовка
+              </Button>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box display={"flex"} alignItems={"flex-end"}>
+              <FormControlLabel
+                label="Начало"
+                labelPlacement="top"
+                control={
+                  <DatePicker
+                    value={startDate}
+                    onChange={(newValue) => {
+                      if (!newValue) return;
+                      setStartDate(newValue);
+                    }}
+                  />
+                }
+              />
+              <FormControlLabel
+                label="Конец"
+                labelPlacement="top"
+                control={
+                  <DatePicker
+                    value={endDate}
+                    onChange={(newValue) => {
+                      if (!newValue) return;
+                      setEndDate(newValue);
+                    }}
+                  />
+                }
+              />
+              <TextField
+                label="Id объекта"
+                value={objectId}
+                onChange={(event) => {
+                  setObjectId(event.target.value);
+                }}
+              />
+              <Button
+                size="medium"
+                variant="contained"
+                style={{ height: "40px" }}
+                onClick={handleGetEvents}
+              >
+                Отфильтровать
               </Button>
             </Box>
           </Grid>

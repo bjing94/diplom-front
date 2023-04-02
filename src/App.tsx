@@ -27,6 +27,8 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuEditPage from "./pages/MenuEditPage";
 import EventsPage from "./pages/EventsPage";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 const drawerWidth = 240;
 function PermanentDrawerLeft() {
@@ -108,18 +110,20 @@ function PermanentDrawerLeft() {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MenuPage />}></Route>
-          <Route path="orders/package" element={<OrderPackagePage />} />
-          <Route path="orders/monitor" element={<OrderMonitorPage />} />
-          <Route path="kitchen" element={<KitchenPage />} />
-          <Route path="pay/:id" element={<PayPage />} />
-          <Route path="menu-edit" element={<MenuEditPage />} />
-          <Route path="events" element={<EventsPage />} />
-        </Routes>
-        <PermanentDrawerLeft />
-      </BrowserRouter>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MenuPage />}></Route>
+            <Route path="orders/package" element={<OrderPackagePage />} />
+            <Route path="orders/monitor" element={<OrderMonitorPage />} />
+            <Route path="kitchen" element={<KitchenPage />} />
+            <Route path="pay/:id" element={<PayPage />} />
+            <Route path="menu-edit" element={<MenuEditPage />} />
+            <Route path="events" element={<EventsPage />} />
+          </Routes>
+          <PermanentDrawerLeft />
+        </BrowserRouter>
+      </LocalizationProvider>
     </div>
   );
 }
