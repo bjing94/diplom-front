@@ -40,7 +40,7 @@ const CookingRequestItem = (props: {
                 onClick={() => {
                   KitchenService.updateRequest({
                     id: request.id,
-                    status: CookingRequestStatus.PENDING,
+                    status: CookingRequestStatus.READY,
                   }).then(updateRequests);
                 }}
                 variant="contained"
@@ -55,20 +55,9 @@ const CookingRequestItem = (props: {
   );
 };
 export default function KitchenPage() {
-  const [readyRequests, setReadyRequests] = useState<
-    CookingRequestGetQueryResponse[]
-  >([]);
   const [pendingRequests, setPendingRequests] = useState<
     CookingRequestGetQueryResponse[]
   >([]);
-
-  const getReadyRequests = () => {
-    KitchenService.findRequests({ status: CookingRequestStatus.READY }).then(
-      (response) => {
-        setReadyRequests(response.data.requests);
-      }
-    );
-  };
 
   const getPendingRequests = () => {
     KitchenService.findRequests({ status: CookingRequestStatus.PENDING }).then(
@@ -83,15 +72,8 @@ export default function KitchenPage() {
   }, []);
 
   const updateRequests = () => {
-    getReadyRequests();
     getPendingRequests();
   };
-
-  const readyRequestItems = readyRequests.map((item) => {
-    return (
-      <CookingRequestItem updateRequests={updateRequests} request={item} />
-    );
-  });
 
   const pendingRequestItems = pendingRequests.map((item) => {
     return (

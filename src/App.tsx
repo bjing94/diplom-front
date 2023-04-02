@@ -29,6 +29,7 @@ import MenuEditPage from "./pages/MenuEditPage";
 import EventsPage from "./pages/EventsPage";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import ProductEditPage from "./pages/ProductEditPage";
 
 const drawerWidth = 240;
 function PermanentDrawerLeft() {
@@ -102,6 +103,16 @@ function PermanentDrawerLeft() {
             </ListItemButton>
           </Link>
         </ListItem>
+        <ListItem key={"product"} disablePadding>
+          <Link to="/product">
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Товары"} />
+            </ListItemButton>
+          </Link>
+        </ListItem>
       </List>
     </Drawer>
   );
@@ -120,6 +131,7 @@ function App() {
             <Route path="pay/:id" element={<PayPage />} />
             <Route path="menu-edit" element={<MenuEditPage />} />
             <Route path="events" element={<EventsPage />} />
+            <Route path="product" element={<ProductEditPage />} />
           </Routes>
           <PermanentDrawerLeft />
         </BrowserRouter>

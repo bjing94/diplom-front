@@ -49,8 +49,8 @@ export default function MenuAddDialog(props: {
 
   useEffect(() => {
     ProductService.getAllProducts({
-      take: 5,
-      skip: 0,
+      take: `5`,
+      skip: `0`,
     }).then((data) => {
       setProducts(data.data.products);
     });
