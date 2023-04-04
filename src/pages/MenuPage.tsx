@@ -16,6 +16,7 @@ import MenuService from "../service/menu/menu.service";
 import { MenuItemResponseDto } from "../service/menu/menu.interface";
 import { OrderItem, PaymentType } from "../service/order.interface";
 import OrderService from "../service/order.service";
+import { Link } from "react-router-dom";
 
 interface BasketItem extends OrderItem {
   name: string;
@@ -116,6 +117,7 @@ export default function MenuPage() {
   const [total, setTotal] = useState<number>(0);
   const [checkout, setCheckout] = useState<boolean>(false);
   const [orderId, setOrderId] = useState<string | undefined>(undefined);
+  const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     MenuService.getMenu().then((response) => {
@@ -176,6 +178,7 @@ export default function MenuPage() {
     });
     if (!response.data.orderId) return;
     setOrderId(response.data.orderId);
+    setPaymentId(response.data.paymentId);
   };
 
   const menuItems = menu
@@ -194,6 +197,9 @@ export default function MenuPage() {
         <Box height={"100vh"} display="flex" flexDirection={"column"}>
           <Typography>Номер вашего заказа:</Typography>
           <Typography> {orderId}</Typography>
+          <Link to={`pay/${paymentId}`}>
+            <Button>Перейти к оплате</Button>
+          </Link>
         </Box>
       </Container>
     );

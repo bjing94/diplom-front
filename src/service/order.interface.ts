@@ -63,3 +63,12 @@ export interface OrderUpdateCommandResponse {
 
   readonly status: OrderStatus;
 }
+
+export interface PaymentUpdateCommandRequest {
+  readonly id: string;
+  readonly status: PaymentStatus;
+}
+
+export interface PaymentUpdateCommandResponse {
+  readonly success: boolean;
+}
