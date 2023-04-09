@@ -39,4 +39,8 @@ export default class ProductService {
       `http://localhost:3334/api/product/${id}`
     );
   }
+
+  public static async runProductEvents() {
+    return axios.get(`http://localhost:3334/api/product/run-events`);
+  }
 }

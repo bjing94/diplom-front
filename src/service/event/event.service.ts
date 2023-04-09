@@ -48,4 +48,24 @@ export default class EventService {
       params: { filter: filter },
     });
   }
+
+  public static async runMenuEvents() {
+    return axios.get("http://localhost:3334/api/event/menu/run-events");
+  }
+
+  public static async runOrderEvents() {
+    return axios.get("http://localhost:3334/api/event/order/run-events");
+  }
+
+  public static async runPaymentEvents() {
+    return axios.get("http://localhost:3334/api/event/payment/run-events");
+  }
+
+  public static async runProductEvents() {
+    return axios.get("http://localhost:3334/api/event/product/run-events");
+  }
+
+  public static async runKitchenEvents() {
+    return axios.get("http://localhost:3334/api/event/kitchen/run-events");
+  }
 }

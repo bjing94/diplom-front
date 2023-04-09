@@ -8,7 +8,7 @@ export default function OrderMonitorPage() {
   const [ordersReady, setOrdersReady] = useState<OrderFindSingle[]>([]);
 
   useEffect(() => {
-    OrderService.findOrders({ status: OrderStatus.CREATED }).then((data) => {
+    OrderService.findOrders({ status: OrderStatus.PAYED }).then((data) => {
       setOrdersPreparing(data.data.orders);
     });
     OrderService.findOrders({ status: OrderStatus.WAITING_FOR_PICKUP }).then(

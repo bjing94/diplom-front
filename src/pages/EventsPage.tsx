@@ -24,6 +24,10 @@ import {
 import EventService from "../service/event/event.service";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { DatePicker } from "@mui/x-date-pickers";
+import OrderService from "../service/order.service";
+import ProductService from "../service/product/product.service";
+import MenuService from "../service/menu/menu.service";
+import PaymentService from "../service/payment/menu.service";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -67,7 +71,7 @@ export default function EventsPage() {
   const [orderEvents, setOrderEvents] = useState<EventResponse[]>([]);
   const [category, setCategory] = useState<CategoryType>(CategoryType.order);
   const [startDate, setStartDate] = useState<Date>(new Date("2023-03-02"));
-  const [endDate, setEndDate] = useState<Date>(new Date("2023-04-02"));
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const [objectId, setObjectId] = useState<string | null>(null);
 
   const handleGetEvents = () => {
@@ -108,6 +112,35 @@ export default function EventsPage() {
       EventService.getMenuEvents(query).then((response) => {
         setOrderEvents(response.data);
       });
+    }
+  };
+
+  const handleRunEvents = () => {
+    const query: FindEventsFilterDto = {
+      from: startDate,
+      to: endDate,
+      id: objectId ?? undefined,
+    };
+
+    if (category === CategoryType.order) {
+      EventService.runOrderEvents();
+    }
+    if (category === CategoryType.product) {
+      EventService.runProductEvents();
+    }
+    if (category === CategoryType.cookingRequest) {
+      EventService.runKitchenEvents();
+    }
+    if (category === CategoryType.cookingStock) {
+      EventService.runKitchenEvents();
+    }
+
+    if (category === CategoryType.payment) {
+      EventService.runPaymentEvents();
+    }
+
+    if (category === CategoryType.menu) {
+      EventService.runMenuEvents();
     }
   };
 
@@ -240,6 +273,16 @@ export default function EventsPage() {
             </Box>
           </Grid>
           <Divider variant="fullWidth" />
+          <Grid item xs={12}>
+            <Button
+              size="medium"
+              variant="contained"
+              style={{ height: "40px" }}
+              onClick={handleRunEvents}
+            >
+              Пересоздать данные для чтения
+            </Button>
+          </Grid>
           <Grid item xs={12}>
             <Box sx={{ height: 800, width: "100%" }}>
               <DataGrid

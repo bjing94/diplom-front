@@ -47,4 +47,8 @@ export default class OrderService {
         return null;
       });
   }
+
+  public static async runOrderEvents() {
+    return axios.get(`http://localhost:3334/api/order/run-events`);
+  }
 }

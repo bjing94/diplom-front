@@ -166,14 +166,25 @@ export default function MenuEditPage() {
         onMenuItemAdd={handleAddItem}
       />
       <Box height={"100vh"} display="flex" flexDirection={"column"}>
-        <Grid container spacing={2} paddingTop={2}>
-          {menuItems}
-          <MenuAddItem
+        {!menu && (
+          <Button
             onClick={() => {
-              setIsAddOpen(true);
+              MenuService.createMenu({ items: [] });
             }}
-          />
-        </Grid>
+          >
+            Создать меню
+          </Button>
+        )}
+        {menu && (
+          <Grid container spacing={2} paddingTop={2}>
+            {menuItems}
+            <MenuAddItem
+              onClick={() => {
+                setIsAddOpen(true);
+              }}
+            />
+          </Grid>
+        )}
       </Box>
     </Container>
   );

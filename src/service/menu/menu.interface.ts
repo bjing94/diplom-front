@@ -53,3 +53,30 @@ export interface MenuUpdateCommandRequest {
 export interface MenuUpdateCommandResponse {
   readonly success: boolean;
 }
+
+export interface MenuItemCreateRequestDto {
+  readonly productId: string;
+
+  readonly available: boolean;
+
+  readonly price: number;
+}
+
+export interface MenuCreateCommandRequest {
+  readonly items: MenuItemCreateRequestDto[];
+}
+
+export interface MenuCreateCommandResponse {
+  readonly success: boolean;
+  readonly id?: string;
+}
+
+export interface MenuFindQueryRequest {
+  id?: string;
+
+  active?: boolean;
+}
+
+export interface MenuFindQueryResponse {
+  readonly menus: MenuResponseDto[];
+}

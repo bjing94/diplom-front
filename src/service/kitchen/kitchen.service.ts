@@ -27,4 +27,8 @@ export default class KitchenService {
         return e;
       });
   }
+
+  public static async runKitchenEvents() {
+    return axios.get(`http://localhost:3334/api/kitchen/run-events`);
+  }
 }
