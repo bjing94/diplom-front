@@ -1,7 +1,7 @@
 export interface FindEventsFilterDto {
-  readonly from: Date;
+  readonly from?: Date;
 
-  readonly to: Date;
+  readonly to?: Date;
 
   readonly id?: string;
 }
