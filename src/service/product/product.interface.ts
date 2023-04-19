@@ -14,6 +14,7 @@ export interface ProductFindQueryResponse {
 
 export interface ProductCreateRequest {
   readonly name: string;
+  readonly imgLink?: string;
 }
 export interface ProductCreateResponse {
   readonly succes: boolean;
@@ -23,6 +24,8 @@ export interface ProductUpdateRequest {
   readonly id: string;
 
   readonly name: string;
+
+  readonly imgLink?: string;
 }
 export interface ProductUpdateResponse {
   readonly success: boolean;

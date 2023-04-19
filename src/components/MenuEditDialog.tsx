@@ -76,6 +76,7 @@ export default function MenuEditDialog(props: {
                     price: price,
                     available: active,
                   });
+                  onClose();
                 }
               }}
             >
@@ -86,7 +87,13 @@ export default function MenuEditDialog(props: {
         <List>
           <Divider />
           <ListItem button>
-            <TextField label="Цена" value={price} />
+            <TextField
+              label="Цена"
+              value={price}
+              onChange={(event) => {
+                setPrice(Number(event.target.value));
+              }}
+            />
           </ListItem>
           <Divider />
           <ListItem button>

@@ -23,14 +23,21 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import MonitorIcon from "@mui/icons-material/Monitor";
+import WhatshotIcon from "@mui/icons-material/Whatshot";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import WidgetsIcon from "@mui/icons-material/Widgets";
+import WarehouseIcon from "@mui/icons-material/Warehouse";
+import LoopIcon from "@mui/icons-material/Loop";
+
 import MenuEditPage from "./pages/MenuEditPage";
 import EventsPage from "./pages/EventsPage";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import ProductEditPage from "./pages/ProductEditPage";
-import ObjectEventsPage from "./pages/ObjectEventsPage";
+import ObjectEventsPage from "./pages/ObjectLifecyclePage";
 
 const drawerWidth = 240;
 function PermanentDrawerLeft() {
@@ -48,9 +55,11 @@ function PermanentDrawerLeft() {
       anchor="left"
     >
       <Toolbar>
-        <Typography fontWeight={"bold"} variant="h5">
-          Администратор
-        </Typography>
+        <Link to="/">
+          <Typography fontWeight={"bold"} variant="h5">
+            Администратор
+          </Typography>
+        </Link>
       </Toolbar>
       <Divider />
       <List>
@@ -68,7 +77,7 @@ function PermanentDrawerLeft() {
           <Link to="/orders/monitor">
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <MonitorIcon />
               </ListItemIcon>
               <ListItemText primary={"Монитор заказов"} />
             </ListItemButton>
@@ -78,7 +87,7 @@ function PermanentDrawerLeft() {
           <Link to="/kitchen">
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <WhatshotIcon />
               </ListItemIcon>
               <ListItemText primary={"Кухня"} />
             </ListItemButton>
@@ -88,7 +97,7 @@ function PermanentDrawerLeft() {
           <Link to="/menu-edit">
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <MenuBookIcon />
               </ListItemIcon>
               <ListItemText primary={"Редактировать меню"} />
             </ListItemButton>
@@ -98,7 +107,7 @@ function PermanentDrawerLeft() {
           <Link to="/events">
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <WidgetsIcon />
               </ListItemIcon>
               <ListItemText primary={"Хранилище событий"} />
             </ListItemButton>
@@ -108,9 +117,19 @@ function PermanentDrawerLeft() {
           <Link to="/product">
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <WarehouseIcon />
               </ListItemIcon>
               <ListItemText primary={"Товары"} />
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem key={"lifecycle"} disablePadding>
+          <Link to="/lifecycle">
+            <ListItemButton>
+              <ListItemIcon>
+                <LoopIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Жизненный цикл объекта"} />
             </ListItemButton>
           </Link>
         </ListItem>
@@ -133,7 +152,7 @@ function App() {
             <Route path="menu-edit" element={<MenuEditPage />} />
             <Route path="events" element={<EventsPage />} />
             <Route path="product" element={<ProductEditPage />} />
-            <Route path="object-lifecycle/:id" element={<ObjectEventsPage />} />
+            <Route path="lifecycle" element={<ObjectEventsPage />} />
           </Routes>
           <PermanentDrawerLeft />
         </BrowserRouter>

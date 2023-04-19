@@ -31,11 +31,13 @@ export default function ProductEditDialog(props: {
 }) {
   const { isOpen, onClose, id } = props;
   const [name, setName] = useState("");
+  const [link, setLink] = useState("");
 
   const handleUpdateProduct = () => {
     return ProductService.update({
       name: name,
       id,
+      imgLink: link,
     }).then(() => {
       onClose();
     });
@@ -43,7 +45,9 @@ export default function ProductEditDialog(props: {
 
   useEffect(() => {
     ProductService.get(id).then((response) => {
+      console.log(response.data.product);
       setName(response.data.product.name);
+      setLink(response.data.product.imgLink ?? "");
     });
   }, [id]);
 
@@ -80,6 +84,15 @@ export default function ProductEditDialog(props: {
               value={name}
               onChange={(event) => {
                 setName(event.target.value);
+              }}
+            />
+          </ListItem>
+          <ListItem>
+            <TextField
+              label="Ссылка на изображение товара"
+              value={link}
+              onChange={(event) => {
+                setLink(event.target.value);
               }}
             />
           </ListItem>

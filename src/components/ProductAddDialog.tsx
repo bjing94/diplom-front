@@ -29,10 +29,12 @@ export default function ProductAddDialog(props: {
 }) {
   const { isOpen, onClose } = props;
   const [name, setName] = useState("");
+  const [link, setLink] = useState("");
 
   const handleCreateProduct = () => {
     return ProductService.create({
       name: name,
+      imgLink: link,
     }).then(() => {
       onClose();
     });
@@ -71,6 +73,15 @@ export default function ProductAddDialog(props: {
               value={name}
               onChange={(event) => {
                 setName(event.target.value);
+              }}
+            />
+          </ListItem>
+          <ListItem>
+            <TextField
+              label="Ссылка на изображение товара"
+              value={link}
+              onChange={(event) => {
+                setLink(event.target.value);
               }}
             />
           </ListItem>

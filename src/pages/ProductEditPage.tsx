@@ -25,56 +25,9 @@ import MenuAddDialog from "../components/MenuAddDialog";
 import ProductService from "../service/product/product.service";
 import ProductEditDialog from "../components/ProductEditDialog";
 import ProductAddDialog from "../components/ProductAddDialog";
-
-function MenuEditItem(props: {
-  item: ProductResponseDto;
-  onClickEdit: () => void;
-}) {
-  const { item, onClickEdit } = props;
-
-  return (
-    <Grid item xs={6}>
-      <Button
-        size="small"
-        style={{ position: "absolute" }}
-        variant="contained"
-        onClick={onClickEdit}
-      >
-        <EditIcon fontSize="small" />
-      </Button>
-      <img
-        width="200px"
-        height="200px"
-        src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=999&q=80"
-        alt={"menu-item"}
-      />
-      <Typography>{item.name}</Typography>
-    </Grid>
-  );
-}
-
-function MenuAddItem(props: { onClick: () => void }) {
-  const { onClick } = props;
-
-  return (
-    <Grid item xs={6}>
-      <Box display={"flex"} justifyContent={"center"}>
-        <Box
-          onClick={onClick}
-          width={"200px"}
-          height={"200px"}
-          fontSize={"100px"}
-          border={"solid 2px"}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <PlusOneRoundedIcon fontSize={"inherit"} />
-        </Box>
-      </Box>
-    </Grid>
-  );
-}
+import AddIcon from "@mui/icons-material/Add";
+import { AddButton } from "../components/AddButton";
+import { DisplayProduct } from "../components/ProductDisplay";
 
 export default function ProductEditPage() {
   const [products, setProducts] = useState<ProductResponseDto[]>([]);
@@ -92,8 +45,8 @@ export default function ProductEditPage() {
   }, []);
 
   const menuItems = products.map((item) => (
-    <MenuEditItem
-      item={item}
+    <DisplayProduct
+      product={item}
       onClickEdit={() => {
         setProductId(item.id);
         setIsEditOpen(true);
@@ -120,7 +73,7 @@ export default function ProductEditPage() {
       <Box height={"100vh"} display="flex" flexDirection={"column"}>
         <Grid container spacing={2} paddingTop={2}>
           {menuItems}
-          <MenuAddItem
+          <AddButton
             onClick={() => {
               setIsAddOpen(true);
             }}

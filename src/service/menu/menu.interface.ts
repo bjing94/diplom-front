@@ -2,6 +2,8 @@ export interface ProductResponseDto {
   readonly id: string;
 
   readonly name: string;
+
+  readonly imgLink?: string;
 }
 
 export interface MenuItemResponseDto {

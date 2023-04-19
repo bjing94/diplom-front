@@ -90,6 +90,7 @@ export default function MenuAddDialog(props: {
                   price: price,
                   available: active,
                 });
+                onClose();
               }}
             >
               Сохранить

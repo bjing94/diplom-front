@@ -24,10 +24,7 @@ import {
 import EventService from "../service/event/event.service";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { DatePicker } from "@mui/x-date-pickers";
-import OrderService from "../service/order.service";
-import ProductService from "../service/product/product.service";
-import MenuService from "../service/menu/menu.service";
-import PaymentService from "../service/payment/menu.service";
+import { Link } from "react-router-dom";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -59,7 +56,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-enum CategoryType {
+export enum CategoryType {
   order = "order",
   product = "product",
   cookingStock = "cooking-stock",

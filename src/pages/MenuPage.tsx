@@ -34,7 +34,7 @@ function MenuItem(props: {
       <img
         width="200px"
         height="200px"
-        src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=999&q=80"
+        src={item.product.imgLink}
         alt={"menu-item"}
       />
       <Typography>{item.product.name}</Typography>
@@ -246,7 +246,6 @@ export default function MenuPage() {
     );
   }
 
-  console.log(basket);
   const checkoutItems = basket.map((item) => {
     return (
       <CheckoutItem
