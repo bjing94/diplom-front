@@ -3,6 +3,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Divider,
   Grid,
   Typography,
 } from "@mui/material";
@@ -17,61 +18,10 @@ import { MenuItemResponseDto } from "../service/menu/menu.interface";
 import { OrderItem, PaymentType } from "../service/order.interface";
 import OrderService from "../service/order.service";
 import { Link } from "react-router-dom";
+import { MenuItemDisplay } from "../components/MenuItemDisplay";
 
 interface BasketItem extends OrderItem {
   name: string;
-}
-function MenuItem(props: {
-  item: MenuItemResponseDto;
-  onAdd: () => any;
-  onRemove: () => any;
-}) {
-  const { item, onAdd, onRemove } = props;
-  const [count, setCount] = useState(0);
-
-  return (
-    <Grid item xs={6}>
-      <img
-        width="200px"
-        height="200px"
-        src={item.product.imgLink}
-        alt={"menu-item"}
-      />
-      <Typography>{item.product.name}</Typography>
-      {count === 0 && (
-        <Button
-          variant={"contained"}
-          onClick={() => {
-            onAdd();
-            setCount(count + 1);
-          }}
-        >
-          Добавить
-        </Button>
-      )}
-      {count > 0 && (
-        <Box display={"flex"} alignItems="center" justifyContent={"center"}>
-          <Button
-            onClick={() => {
-              onRemove();
-              setCount(count - 1);
-            }}
-          >
-            -
-          </Button>
-          <Typography>{count}</Typography>
-          <Button
-            onClick={() => {
-              onAdd();
-              setCount(count + 1);
-            }}
-          >
-            +
-          </Button>
-        </Box>
-      )}
-    </Grid>
-  );
 }
 
 function CheckoutItem(props: {
@@ -115,6 +65,7 @@ export default function MenuPage() {
   const [menu, setMenu] = useState<MenuResponseDto | undefined>(undefined);
   const [basket, setBasket] = useState<BasketItem[]>([]);
   const [total, setTotal] = useState<number>(0);
+  const [sum, setSum] = useState<number>(0);
   const [checkout, setCheckout] = useState<boolean>(false);
   const [orderId, setOrderId] = useState<string | undefined>(undefined);
   const [paymentId, setPaymentId] = useState<string | undefined>(undefined);
@@ -127,20 +78,22 @@ export default function MenuPage() {
 
   const addItemToBasket = (id: string) => {
     const newBasket = [...basket];
+    if (!menu) return;
+
+    const itemFromMenu = menu.items.find((item) => item.id === id);
+    if (!itemFromMenu) return;
 
     const existingItem = basket.find((item) => item.menuItemId === id);
     if (existingItem) {
       existingItem.count += 1;
       setBasket(newBasket);
       setTotal(total + 1);
+      setSum(sum + itemFromMenu.price);
       return;
     }
     if (!menu) {
       return;
     }
-
-    const itemFromMenu = menu.items.find((item) => item.id === id);
-    if (!itemFromMenu) return;
 
     setBasket([
       ...newBasket,
@@ -151,10 +104,17 @@ export default function MenuPage() {
       },
     ]);
     setTotal(total + 1);
+    setSum(sum + itemFromMenu.price);
   };
 
   const removeItemFromBasket = (id: string) => {
     const newBasket = [...basket];
+
+    if (!menu) {
+      return;
+    }
+    const itemFromMenu = menu.items.find((item) => item.id === id);
+    if (!itemFromMenu) return;
 
     const existingItem = basket.find((item) => item.menuItemId === id);
     if (existingItem) {
@@ -164,6 +124,7 @@ export default function MenuPage() {
         setBasket(newBasket.filter((item) => item.menuItemId !== id));
         return;
       }
+      setSum(sum - itemFromMenu.price);
       setBasket(newBasket);
       return;
     }
@@ -183,7 +144,7 @@ export default function MenuPage() {
 
   const menuItems = menu
     ? menu.items.map((item) => (
-        <MenuItem
+        <MenuItemDisplay
           onAdd={() => addItemToBasket(item.id)}
           onRemove={() => removeItemFromBasket(item.id)}
           item={item}
@@ -208,39 +169,53 @@ export default function MenuPage() {
   if (!checkout) {
     return (
       <Container maxWidth={"sm"}>
-        <Box height={"100vh"} display="flex" flexDirection={"column"}>
+        <Box
+          height={"100vh"}
+          display="flex"
+          flexDirection={"column"}
+          position={"relative"}
+        >
           <Grid container spacing={2} paddingTop={2}>
             {menuItems}
           </Grid>
-          <Grid container xs={12} alignContent="flex-end">
-            <Grid item xs={12} height="fit-content">
-              <Box display={"flex"} justifyContent={"flex-end"}>
-                <Typography width={"fit-content"}>Всего: 0</Typography>
-                <Typography width={"fit-content"}>
-                  Количество: {total}
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} height="fit-content">
-              <Box display={"flex"} justifyContent={"center"}>
-                <Box margin={"5px"}>
-                  <Button variant={"contained"} color={"secondary"}>
-                    Назад
-                  </Button>
+          <Box
+            paddingTop={"10px"}
+            paddingBottom={"30px"}
+            borderTop={"solid lightgray 1px"}
+            position={"absolute"}
+            bottom="0"
+            left="0"
+            width={"100%"}
+          >
+            <Grid container alignContent="flex-end" height="fit-content">
+              <Divider />
+              <Grid item xs={12} height="fit-content">
+                <Box display={"flex"} justifyContent={"flex-end"}>
+                  <Typography width={"fit-content"} fontWeight={"bold"}>
+                    Итого: {sum}
+                  </Typography>
+                  <Typography width={"fit-content"} marginLeft={"5px"}>
+                    Количество: {total}
+                  </Typography>
                 </Box>
-                <Box margin={"5px"}>
-                  <Button
-                    variant={"contained"}
-                    onClick={() => {
-                      setCheckout(true);
-                    }}
-                  >
-                    Оформить заказ
-                  </Button>
+              </Grid>
+              <Grid item xs={12} height="fit-content">
+                <Box display={"flex"} justifyContent={"center"}>
+                  <Box margin={"5px"}>
+                    <Button
+                      variant={"contained"}
+                      onClick={() => {
+                        setCheckout(true);
+                      }}
+                      disabled={total === 0}
+                    >
+                      Оформить заказ
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
       </Container>
     );
@@ -258,44 +233,63 @@ export default function MenuPage() {
 
   return (
     <Container maxWidth={"sm"}>
-      <Box height={"100vh"} display="flex" flexDirection={"column"}>
-        <Typography>Ваш заказ:</Typography>
+      <Box
+        height={"100vh"}
+        display="flex"
+        flexDirection={"column"}
+        position={"relative"}
+      >
         <Grid container spacing={2} paddingTop={2}>
           {checkoutItems}
         </Grid>
-        <Grid container xs={12} alignContent="flex-end">
-          <Grid item xs={12} height="fit-content">
-            <Box display={"flex"} justifyContent={"flex-end"}>
-              <Typography width={"fit-content"}>Всего: 0</Typography>
-              <Typography width={"fit-content"}>Количество: {total}</Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} height="fit-content">
-            <Box display={"flex"} justifyContent={"center"}>
-              <Box margin={"5px"}>
-                <Button
-                  variant={"contained"}
-                  onClick={() => {
-                    setCheckout(false);
-                  }}
-                  color={"secondary"}
-                >
-                  Назад
-                </Button>
+        <Box
+          paddingTop={"10px"}
+          paddingBottom={"30px"}
+          borderTop={"solid lightgray 1px"}
+          position={"absolute"}
+          bottom="0"
+          left="0"
+          width={"100%"}
+        >
+          <Grid container alignContent="flex-end" height="fit-content">
+            <Divider />
+            <Grid item xs={12} height="fit-content">
+              <Box display={"flex"} justifyContent={"flex-end"}>
+                <Typography width={"fit-content"} fontWeight={"bold"}>
+                  Итого: {sum}
+                </Typography>
+                <Typography width={"fit-content"} marginLeft={"5px"}>
+                  Количество: {total}
+                </Typography>
               </Box>
-              <Box margin={"5px"}>
-                <Button
-                  variant={"contained"}
-                  onClick={() => {
-                    handlerCreateOrder();
-                  }}
-                >
-                  Оплатить
-                </Button>
+            </Grid>
+            <Grid item xs={12} height="fit-content">
+              <Box display={"flex"} justifyContent={"center"}>
+                <Box margin={"5px"}>
+                  <Button
+                    variant={"contained"}
+                    onClick={() => {
+                      setCheckout(false);
+                    }}
+                    color={"secondary"}
+                  >
+                    Назад
+                  </Button>
+                </Box>
+                <Box margin={"5px"}>
+                  <Button
+                    variant={"contained"}
+                    onClick={() => {
+                      handlerCreateOrder();
+                    }}
+                  >
+                    Оплатить
+                  </Button>
+                </Box>
               </Box>
-            </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Box>
     </Container>
   );

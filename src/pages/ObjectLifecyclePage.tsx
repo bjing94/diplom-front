@@ -171,12 +171,26 @@ export default function ObjectEventsPage() {
             />
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
-          <Typography fontWeight={"bold"} variant="h4">
-            {titleText[category]} {id}
-          </Typography>
-        </Grid>
-        {eventElements}
+        {eventElements.length > 0 ? (
+          (
+            <Grid item xs={12}>
+              <Typography fontWeight={"bold"} variant="h4">
+                {titleText[category]} {id}
+              </Typography>
+            </Grid>
+          ) && eventElements
+        ) : (
+          <Box display={"flex"} justifyContent={"center"} width="100%">
+            <Box
+              bgcolor={"#ff3333"}
+              color="#eaeaea"
+              padding={"10px 25px"}
+              borderRadius={"10px"}
+            >
+              <Typography variant="h5">Объект не найден</Typography>
+            </Box>
+          </Box>
+        )}
       </Grid>
     </Container>
   );

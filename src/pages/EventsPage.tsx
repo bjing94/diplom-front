@@ -141,6 +141,29 @@ export default function EventsPage() {
     }
   };
 
+  const handleClearRead = () => {
+    if (category === CategoryType.order) {
+      EventService.clearOrderRead();
+    }
+    if (category === CategoryType.product) {
+      EventService.clearProductRead();
+    }
+    if (category === CategoryType.cookingRequest) {
+      EventService.clearKitchenRead();
+    }
+    if (category === CategoryType.cookingStock) {
+      EventService.clearKitchenRead();
+    }
+
+    if (category === CategoryType.payment) {
+      EventService.clearPaymentRead();
+    }
+
+    if (category === CategoryType.menu) {
+      EventService.clearMenuRead();
+    }
+  };
+
   useEffect(() => {
     handleGetEvents();
   }, [category]);
@@ -220,7 +243,7 @@ export default function EventsPage() {
                 }}
                 variant="contained"
               >
-                Готовка
+                Кухня
               </Button>
             </Box>
           </Grid>
@@ -278,6 +301,14 @@ export default function EventsPage() {
               onClick={handleRunEvents}
             >
               Пересоздать данные для чтения
+            </Button>
+            <Button
+              size="medium"
+              variant="contained"
+              style={{ height: "40px" }}
+              onClick={handleClearRead}
+            >
+              Удалить данные для чтения
             </Button>
           </Grid>
           <Grid item xs={12}>

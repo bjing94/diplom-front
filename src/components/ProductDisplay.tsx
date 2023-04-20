@@ -38,18 +38,20 @@ export function DisplayProduct(props: {
           >
             <EditIcon fontSize="small" />
           </Button>
-          <Button
-            size="small"
-            style={{
-              height: "30px",
-              width: "30px",
-            }}
-            variant="contained"
-            color="error"
-            onClick={onClickDelete}
-          >
-            <DeleteIcon fontSize="small" />
-          </Button>
+          {onClickDelete && (
+            <Button
+              size="small"
+              style={{
+                height: "30px",
+                width: "30px",
+              }}
+              variant="contained"
+              color="error"
+              onClick={onClickDelete}
+            >
+              <DeleteIcon fontSize="small" />
+            </Button>
+          )}
         </CardActions>
       </Card>
     </Grid>

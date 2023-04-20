@@ -68,4 +68,25 @@ export default class EventService {
   public static async runKitchenEvents() {
     return axios.get("http://localhost:3334/api/event/kitchen/run-events");
   }
+
+  // ===========
+  public static async clearMenuRead() {
+    return axios.get("http://localhost:3334/api/event/menu/clear-read");
+  }
+
+  public static async clearOrderRead() {
+    return axios.get("http://localhost:3334/api/event/order/clear-read");
+  }
+
+  public static async clearPaymentRead() {
+    return axios.get("http://localhost:3334/api/event/payment/clear-read");
+  }
+
+  public static async clearProductRead() {
+    return axios.get("http://localhost:3334/api/event/product/clear-read");
+  }
+
+  public static async clearKitchenRead() {
+    return axios.get("http://localhost:3334/api/event/kitchen/clear-read");
+  }
 }
